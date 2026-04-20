@@ -1,20 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {Component} from 'react'
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeNavScreen from './src/HomeNav';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+const Tab = createBottomTabNavigator()
+
+export default class App extends Component {
+     state = {
+          perfis: [],
+          selecionado: 0,
+          dia: new Date()
+     }
+
+     criarPerfil = (perfil) => {
+          const perfis = this.state.perfis
+          perfis.push(perfil)
+          this.setState({perfis: perfis,
+                         selecionado: perfis.length-1,
+                         dia: this.state.dia})
+     }
+     criarTarefa = (tarefa) => {
+          const perfis = this.state.perfis
+          perfis[this.state.selecionado].tarefas.push(tarefa)
+          this.setState({perfis})
+     }
+
+     render(){
+          console.log(this.state)
+
+          return (
+               <NavigationContainer>
+                    <Tab.Navigator screenOptions= {{headerShown: false}}>
+                         <Tab.Screen name='Tarefas dia'>
+                              {props => <HomeNavScreen {...props}
+                                   perfis={this.perfis}
+                                   selecionado={this.selecionado}
+                                   criarPerfil={this.criarPerfil}
+                                   criarTarefa={this.criarTarefa}
+                                   tarefas={this.state.tarefasDia}/>}
+                         </Tab.Screen>
+                    </Tab.Navigator>
+               </NavigationContainer>
+
+          );
+     }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
