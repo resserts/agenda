@@ -8,7 +8,7 @@ const Tab = createBottomTabNavigator()
 export default class App extends Component {
      state = {
           perfis: [],
-          selecionado: 0,
+          selecionado: -1,
           dia: new Date()
      }
 
@@ -33,11 +33,10 @@ export default class App extends Component {
                     <Tab.Navigator screenOptions= {{headerShown: false}}>
                          <Tab.Screen name='Tarefas dia'>
                               {props => <HomeNavScreen {...props}
-                                   perfis={this.perfis}
-                                   selecionado={this.selecionado}
+                                   perfis={this.state.perfis}
+                                   selecionado={this.state.selecionado}
                                    criarPerfil={this.criarPerfil}
-                                   criarTarefa={this.criarTarefa}
-                                   tarefas={this.state.tarefasDia}/>}
+                                   criarTarefa={this.criarTarefa}/>}
                          </Tab.Screen>
                     </Tab.Navigator>
                </NavigationContainer>

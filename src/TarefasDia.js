@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import CriarTarefa from './CriarTarefa'
 import CriarPerfil from './CriarPerfil'
+import { CheckBox } from 'react-native-web'
 
 
 
@@ -20,12 +21,21 @@ export default class TarefasDia extends React.Component {
      }
      render(){
 
-          if(selecionado>=0){
-               const perfis = this.props.perfis
-               const selecionado = this.props.selecionado
-               const tarefas = perfis[selecionado].tarefas
+          const perfis = this.props.perfis
+          const selecionado = this.props.selecionado
+          if(selecionado<0){
+               return (
+                    <View>
+                         <TouchableOpacity onPress={this.criarPerfilButton}>
+                         <View style={styles.button}>
+                              <Text style={styles.buttonText}>Criar Perfil</Text>
+                         </View>
+                         </TouchableOpacity>
+                    </View>
+               )
           }
 
+          const tarefas = perfis[selecionado].tarefas
           console.log("ate aqui foi.", tarefas)
           return (
                <ScrollView style={{backgroundColor: '#101010'}} contentContainerStyle={[!tarefas.length && {flex: 1, backgroundColor: '#202020'}]}>
@@ -44,12 +54,10 @@ export default class TarefasDia extends React.Component {
                               <Text style={styles.tarefa}>{index+1}) {item.titulo}</Text>
                               <Text style={styles.tarefa}>{item.data}</Text>
                               <Text style={styles.tarefa}>{item.descricao}</Text>
+                              <CheckBox value={item.status} style={{alignSelf: 'flex-end'}}/>
                               </View>
                          ))
                     }
-                    </View>
-                    <View>
-                         <Text style={styles.text}>Pelo menos funciona</Text>
                     </View>
                     <TouchableOpacity onPress={this.criarTarefaButton}>
                     <View style={styles.button}>
