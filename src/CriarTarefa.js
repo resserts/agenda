@@ -6,13 +6,14 @@ import {
      TextInput,
      TouchableOpacity
 } from 'react-native'
+import DatePicker from 'react-datepicker'
 import TarefasDia from './TarefasDia'
 
 export default class CriarTarefa extends React.Component {
      state = {
           titulo:'',
           data:new Date(),
-          status: 0,
+          status: false,
           descricao: ''
      }
      onChangeText = (key, value) => {
@@ -37,7 +38,7 @@ export default class CriarTarefa extends React.Component {
           this.setState({
                titulo:'',
                data:new Date(),
-               status: 0,
+               status: false,
                descricao: ''
           })
           this.props.navigation.navigate('Tarefas dia', {TarefasDia})
@@ -51,11 +52,10 @@ export default class CriarTarefa extends React.Component {
                style={styles.input}
                value={this.state.nome}
                />
-               <TextInput
-               placeholder='Data'
-               onChangeText={val => this.onChangeText('data', val)}
+               <DatePicker
+               selected={new Date()}
+               onChange={(date) => {this.state.data=date}}
                style={styles.input}
-               value={this.state.nome}
                />
                <TextInput
                placeholder='Descrição'
@@ -72,8 +72,42 @@ export default class CriarTarefa extends React.Component {
           )
      }
 }
-
+// ... (imports permanecem iguais)
 const styles = StyleSheet.create({
+     container: {
+          backgroundColor: '#0f172a',
+          flex: 1,
+          justifyContent: 'center',
+          padding: 20
+     },
+     input: {
+          height: 55,
+          backgroundColor: '#1e293b',
+          borderRadius: 12,
+          paddingHorizontal: 15,
+          color: 'white',
+          fontSize: 16,
+          borderWidth: 1,
+          borderColor: '#334155',
+          marginBottom: 15,
+          width: '100%',
+          justifyContent: 'center' // Para o DatePicker parecer um input
+     },
+     button: {
+          height: 55,
+          backgroundColor: '#6366f1',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 12,
+          marginTop: 10
+     },
+     buttonText: {
+          color: 'white',
+          fontSize: 18,
+          fontWeight: 'bold'
+     }
+})
+/*const styles = StyleSheet.create({
      button: {
           height: 50,
           backgroundColor: '#666',
@@ -105,6 +139,6 @@ const styles = StyleSheet.create({
           alignSelf: 'center',
           height: 50
      }
-})
+})*/
 
 

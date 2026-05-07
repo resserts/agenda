@@ -5,6 +5,12 @@ import HomeNavScreen from './src/HomeNav';
 
 const Tab = createBottomTabNavigator()
 
+class Perfil{
+     constructor(nome){
+          this.nome=nome;
+          this.tarefas=[];
+     }
+}
 export default class App extends Component {
      state = {
           perfis: [],
@@ -30,7 +36,12 @@ export default class App extends Component {
 
           return (
                <NavigationContainer>
-                    <Tab.Navigator screenOptions= {{headerShown: false}}>
+                    <Tab.Navigator screenOptions= {{
+                         headerShown: false,
+                         tabBarStyle: { backgroundColor: '#1e293b', borderTopColor: '#334155' },
+                         tabBarActiveTintColor: '#6366f1',
+                         tabBarInactiveTintColor: '#94a3b8'
+                    }}>
                          <Tab.Screen name='Tarefas dia'>
                               {props => <HomeNavScreen {...props}
                                    perfis={this.state.perfis}

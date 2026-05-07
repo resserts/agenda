@@ -48,8 +48,47 @@ export default class CriarPerfil extends React.Component {
           )
      }
 }
-
+// ... (imports permanecem iguais)
 const styles = StyleSheet.create({
+     container: {
+          backgroundColor: '#0f172a', // Azul escuro moderno
+          flex: 1,
+          justifyContent: 'center',
+          padding: 20
+     },
+     input: {
+          height: 55,
+          backgroundColor: '#1e293b',
+          borderRadius: 12,
+          paddingHorizontal: 15,
+          color: 'white',
+          fontSize: 16,
+          borderWidth: 1,
+          borderColor: '#334155',
+          marginBottom: 15,
+          width: '100%',
+          alignSelf: 'center'
+     },
+     button: {
+          height: 55,
+          backgroundColor: '#6366f1', // Indigo vibrante
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 12,
+          width: '100%',
+          marginTop: 10,
+          elevation: 3,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25
+     },
+     buttonText: {
+          color: 'white',
+          fontSize: 18,
+          fontWeight: 'bold'
+     }
+})
+/*const styles = StyleSheet.create({
      button: {
           height: 50,
           backgroundColor: '#666',
@@ -81,6 +120,6 @@ const styles = StyleSheet.create({
           alignSelf: 'center',
           height: 50
      }
-})
+})*/
 
 

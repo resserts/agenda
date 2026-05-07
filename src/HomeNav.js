@@ -6,7 +6,11 @@ import CriarPerfil from './CriarPerfil'
 const HomeNav = createStackNavigator()
 
 const HomeNavScreen = ({perfis, selecionado, criarTarefa, criarPerfil}) => (
-     <HomeNav.Navigator>
+     <HomeNav.Navigator screenOptions={{
+          headerStyle: { backgroundColor: '#0f172a' },
+          headerTintColor: '#fff',
+          headerTitleStyle: { fontWeight: 'bold' }
+     }}>
           <HomeNav.Screen name="Tarefas dia">
                {(props) => <TarefasDia {...props} perfis={perfis} selecionado={selecionado}/>}
           </HomeNav.Screen>
