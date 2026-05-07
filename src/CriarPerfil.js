@@ -6,6 +6,7 @@ import {
      TextInput,
      TouchableOpacity
 } from 'react-native'
+import { Perfil } from './Perfil'
 import TarefasDia from './TarefasDia'
 
 export default class CriarPerfil extends React.Component {
@@ -20,10 +21,8 @@ export default class CriarPerfil extends React.Component {
                alert('Por favor insira um nome')
                return
           }
-          const perfil = {
-               titulo: this.state.nome,
-               tarefas: []
-          }
+
+          var perfil = new Perfil(this.state.nome)
           this.props.criarPerfil(perfil)
           this.setState({
                nome:''

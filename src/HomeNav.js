@@ -5,7 +5,7 @@ import CriarPerfil from './CriarPerfil'
 
 const HomeNav = createStackNavigator()
 
-const HomeNavScreen = ({perfis, selecionado, criarTarefa, criarPerfil}) => (
+const HomeNavScreen = ({perfis, selecionado,  criarPerfil, getPerfil}) => (
      <HomeNav.Navigator screenOptions={{
           headerStyle: { backgroundColor: '#0f172a' },
           headerTintColor: '#fff',
@@ -15,7 +15,7 @@ const HomeNavScreen = ({perfis, selecionado, criarTarefa, criarPerfil}) => (
                {(props) => <TarefasDia {...props} perfis={perfis} selecionado={selecionado}/>}
           </HomeNav.Screen>
           <HomeNav.Screen name="Criar tarefa">
-               {(props) => <CriarTarefa {...props} criarTarefa={criarTarefa}/>}
+               {(props) => <CriarTarefa {...props} getPerfil={getPerfil}/>}
           </HomeNav.Screen>
           <HomeNav.Screen name="Criar perfil">
                {(props) => <CriarPerfil {...props} criarPerfil={criarPerfil}/>}

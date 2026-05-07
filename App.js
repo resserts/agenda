@@ -2,15 +2,11 @@ import React, {Component} from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeNavScreen from './src/HomeNav';
+import { Perfil } from './src/Perfil';
+import Tarefa from './src/Tarefa';
 
 const Tab = createBottomTabNavigator()
 
-class Perfil{
-     constructor(nome){
-          this.nome=nome;
-          this.tarefas=[];
-     }
-}
 export default class App extends Component {
      state = {
           perfis: [],
@@ -18,6 +14,9 @@ export default class App extends Component {
           dia: new Date()
      }
 
+     getPerfil = () => {
+          return this.state.perfis[this.state.selecionado]
+     }
      criarPerfil = (perfil) => {
           const perfis = this.state.perfis
           perfis.push(perfil)
@@ -25,9 +24,9 @@ export default class App extends Component {
                          selecionado: perfis.length-1,
                          dia: this.state.dia})
      }
-     criarTarefa = (tarefa) => {
+     criarTarefa = (titulo, descricao, data) => {
           const perfis = this.state.perfis
-          perfis[this.state.selecionado].tarefas.push(tarefa)
+          perfis[this.state.selecionado].addTarefa(new Tarefa(titulo, descricao, data))
           this.setState({perfis})
      }
 
@@ -47,7 +46,8 @@ export default class App extends Component {
                                    perfis={this.state.perfis}
                                    selecionado={this.state.selecionado}
                                    criarPerfil={this.criarPerfil}
-                                   criarTarefa={this.criarTarefa}/>}
+                                   criarTarefa={this.criarTarefa}
+                                   getPerfil={this.getPerfil}/>}
                          </Tab.Screen>
                     </Tab.Navigator>
                </NavigationContainer>

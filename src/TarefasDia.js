@@ -34,7 +34,7 @@ import CriarPerfil from './CriarPerfil'
                     )
                }
 
-               const tarefas = perfis[selecionado].tarefas
+               const tarefas = perfis[selecionado].getTarefas()
                console.log("ate aqui foi.", tarefas)
                return (
                     <ScrollView style={{backgroundColor: '#101010'}} contentContainerStyle={[!tarefas.length && {flex: 1, backgroundColor: '#202020'}]}>

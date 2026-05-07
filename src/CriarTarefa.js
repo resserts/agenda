@@ -8,6 +8,8 @@ import {
 } from 'react-native'
 import DatePicker from 'react-datepicker'
 import TarefasDia from './TarefasDia'
+import { Tarefa } from './Tarefa'
+import { Perfil } from './Perfil'
 
 export default class CriarTarefa extends React.Component {
      state = {
@@ -28,13 +30,9 @@ export default class CriarTarefa extends React.Component {
                alert('Por favor insira uma data')
                return
           }
-          const tarefa = {
-               titulo: this.state.titulo,
-               data: this.state.data,
-               status: this.state.status,
-               descricao: this.state.descricao
-          }
-          this.props.criarTarefa(tarefa)
+          var perfil = this.props.getPerfil()
+          perfil.addTarefa(new Tarefa(this.state.titulo, this.state.descricao, this.state.data))
+          //this.props.criarTarefa(this.state.titulo, this.state.descricao, this.state.data)
           this.setState({
                titulo:'',
                data:new Date(),
