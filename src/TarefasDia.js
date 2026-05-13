@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import CriarTarefa from './CriarTarefa'
 import CriarPerfil from './CriarPerfil'
-
+import TarefasTodas from './TarefasTodas'
 
 
      export default class TarefasDia extends React.Component {
@@ -17,6 +17,9 @@ import CriarPerfil from './CriarPerfil'
           }
           criarPerfilButton = () => {
                this.props.navigation.navigate("Criar perfil", CriarPerfil)
+          }
+          tarefasTodasButton = () => {
+               this.props.navigation.navigate("Tarefas todas", TarefasTodas)
           }
           render(){
 
@@ -64,6 +67,11 @@ import CriarPerfil from './CriarPerfil'
                     <TouchableOpacity onPress={this.criarTarefaButton}>
                     <View style={styles.button}>
                          <Text style={styles.buttonText}>Criar Tarefa</Text>
+                    </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.tarefasTodasButton}>
+                    <View style={styles.button}>
+                         <Text style={styles.buttonText}>Ver todas as tarefas</Text>
                     </View>
                     </TouchableOpacity>
                </ScrollView>

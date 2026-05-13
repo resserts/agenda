@@ -32,7 +32,6 @@ export default class CriarTarefa extends React.Component {
           }
           var perfil = this.props.getPerfil()
           perfil.addTarefa(new Tarefa(this.state.titulo, this.state.descricao, this.state.data))
-          //this.props.criarTarefa(this.state.titulo, this.state.descricao, this.state.data)
           this.setState({
                titulo:'',
                data:new Date(),

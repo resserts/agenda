@@ -24,11 +24,6 @@ export default class App extends Component {
                          selecionado: perfis.length-1,
                          dia: this.state.dia})
      }
-     criarTarefa = (titulo, descricao, data) => {
-          const perfis = this.state.perfis
-          perfis[this.state.selecionado].addTarefa(new Tarefa(titulo, descricao, data))
-          this.setState({perfis})
-     }
 
      render(){
           console.log(this.state)
@@ -46,7 +41,6 @@ export default class App extends Component {
                                    perfis={this.state.perfis}
                                    selecionado={this.state.selecionado}
                                    criarPerfil={this.criarPerfil}
-                                   criarTarefa={this.criarTarefa}
                                    getPerfil={this.getPerfil}/>}
                          </Tab.Screen>
                     </Tab.Navigator>

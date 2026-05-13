@@ -1,5 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import TarefasDia from './TarefasDia'
+import TarefasTodas from './TarefasTodas'
 import CriarTarefa from './CriarTarefa'
 import CriarPerfil from './CriarPerfil'
 
@@ -13,6 +14,9 @@ const HomeNavScreen = ({perfis, selecionado,  criarPerfil, getPerfil}) => (
      }}>
           <HomeNav.Screen name="Tarefas dia">
                {(props) => <TarefasDia {...props} perfis={perfis} selecionado={selecionado}/>}
+          </HomeNav.Screen>
+          <HomeNav.Screen name="Tarefas todas">
+               {(props) => <TarefasTodas {...props} perfis={perfis}/>}
           </HomeNav.Screen>
           <HomeNav.Screen name="Criar tarefa">
                {(props) => <CriarTarefa {...props} getPerfil={getPerfil}/>}
