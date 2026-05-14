@@ -47,12 +47,11 @@ export default class CriarTarefa extends React.Component {
                placeholder='Titulo'
                onChangeText={val => this.onChangeText('titulo', val)}
                style={styles.input}
-               value={this.state.nome}
+               value={this.state.titulo}
                />
                <DatePicker
-               selected={new Date()}
+               selected={this.state.data}
                onChange={(date) => {this.state.data=date}}
-               style={styles.input}
                />
                <TextInput
                placeholder='Descrição'

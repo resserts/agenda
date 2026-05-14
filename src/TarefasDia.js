@@ -6,6 +6,7 @@ import {
      TouchableOpacity,
      ScrollView
 } from 'react-native'
+import DatePicker from 'react-datepicker'
 import CriarTarefa from './CriarTarefa'
 import CriarPerfil from './CriarPerfil'
 import TarefasTodas from './TarefasTodas'
@@ -21,10 +22,19 @@ import TarefasTodas from './TarefasTodas'
           tarefasTodasButton = () => {
                this.props.navigation.navigate("Tarefas todas", TarefasTodas)
           }
+          selecionarPerfilButton = (selecionar) => {
+               this.props.selecionarPerfil(selecionar)
+               this.props.navigation.navigate("Tarefas dia", TarefasDia)
+          }
+          selecionarDiaButton = (dia) => {
+               this.props.selecionarDia(dia)
+               this.props.navigation.navigate("Tarefas dia", TarefasDia)
+          }
           render(){
 
                const perfis = this.props.perfis
                const selecionado = this.props.selecionado
+               const dia = this.props.dia
                if(selecionado<0){
                     return (
                          <View>
@@ -37,8 +47,7 @@ import TarefasTodas from './TarefasTodas'
                     )
                }
 
-               const tarefas = perfis[selecionado].getTarefas()
-               console.log("ate aqui foi.", tarefas)
+               const tarefas = perfis[selecionado].getTarefas().filter(tarefa => tarefa.data.toDateString() === dia.toDateString()).sort((a, b) => a.data.getTime() - b.data.getTime())
                return (
                     <ScrollView style={{backgroundColor: '#101010'}} contentContainerStyle={[!tarefas.length && {flex: 1, backgroundColor: '#202020'}]}>
                          <TouchableOpacity onPress={this.criarPerfilButton}>
@@ -46,6 +55,19 @@ import TarefasTodas from './TarefasTodas'
                               <Text style={styles.buttonText}>Criar Perfil</Text>
                          </View>
                          </TouchableOpacity>
+                         <View style={styles.button}>
+                              <select onChange={p => this.selecionarPerfilButton(p.target.value)} value={selecionado} style={{color: 'white', fontSize: 16, fontWeight: 'bold'}}>
+                              {
+                                   perfis.map((item, index) => (
+                                        <option value={index}>{item.nome}</option>
+                                   ))
+                              }
+                              </select>
+                              <DatePicker
+                                   selected={dia}
+                                   onChange={(date) => { this.selecionarDiaButton(date)}}
+                              />
+                         </View>
                          <View style={[!tarefas.length && { justifyContent: 'center', flex: 1 , backgroundColor: '#101010'}]}>
                          {
                               !tarefas.length && <Text style={styles.text}>Não há nenhuma tarefa salva</Text>

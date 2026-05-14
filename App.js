@@ -24,6 +24,12 @@ export default class App extends Component {
                          selecionado: perfis.length-1,
                          dia: this.state.dia})
      }
+     selecionarPerfil = (index) => {
+          this.setState({selecionado: index})
+     }
+     selecionarDia = (dia) => {
+          this.setState({dia: dia})
+     }
 
      render(){
           console.log(this.state)
@@ -40,7 +46,10 @@ export default class App extends Component {
                               {props => <HomeNavScreen {...props}
                                    perfis={this.state.perfis}
                                    selecionado={this.state.selecionado}
+                                   dia={this.state.dia}
                                    criarPerfil={this.criarPerfil}
+                                   selecionarPerfil={this.selecionarPerfil}
+                                   selecionarDia={this.selecionarDia}
                                    getPerfil={this.getPerfil}/>}
                          </Tab.Screen>
                     </Tab.Navigator>
