@@ -30,6 +30,12 @@ import TarefasTodas from './TarefasTodas'
                this.props.selecionarDia(dia)
                this.props.navigation.navigate("Tarefas dia", TarefasDia)
           }
+          alterarStatusButton = (tarefa) => {
+               tarefa.status = !tarefa.status;
+               // Força o React Navigation a atualizar o estado da tela baseada na mudança do objeto
+               this.props.navigation.setParams({ refresh: Math.random() });
+          }
+
           render(){
 
                const perfis = this.props.perfis
@@ -72,19 +78,25 @@ import TarefasTodas from './TarefasTodas'
                          {
                               !tarefas.length && <Text style={styles.text}>Não há nenhuma tarefa salva</Text>
                          }
-                         {
-                              tarefas.map((item, index) => (
-                                   <View style={styles.tarefaContainer} key={index}>
-                                   <Text style={styles.tarefa}>{item.titulo}</Text>
-                                   <Text style={styles.tarefa}>{item.data.toDateString()}</Text>
-                                   <Text style={styles.tarefa}>{item.descricao}</Text>
-                                   <TouchableOpacity style={{alignSelf: 'flex-end'}}/>
-                                   <View style={styles.button}>
-                                   <Text style={styles.buttonText}>{item.status ? '✅':'🟩'}</Text>
-                              </View>
-                              </View>
-                         ))
-                    }
+                              {
+                                   tarefas.map((item) => (
+                                       /* CORRIGIDO: Agora usamos o ID único da tarefa como key */
+                                       <View style={styles.tarefaContainer} key={item.getId()}>
+                                            <Text style={styles.tarefa}>{item.titulo}</Text>
+                                            <Text style={styles.tarefa}>{item.data.toDateString()}</Text>
+                                            <Text style={styles.tarefa}>{item.descricao}</Text>
+
+                                            <TouchableOpacity
+                                                style={{alignSelf: 'flex-end', width: '40%'}}
+                                                onPress={() => this.alterarStatusButton(item)}
+                                            >
+                                                 <View style={[styles.button, {marginVertical: 5, width: '100%'}, item.status && {backgroundColor: '#22c55e'}]}>
+                                                      <Text style={styles.buttonText}>{item.status ? '✅ Concluída' : '🟩 Pendente'}</Text>
+                                                 </View>
+                                            </TouchableOpacity>
+                                       </View>
+                                   ))
+                              }
                     </View>
                     <TouchableOpacity onPress={this.criarTarefaButton}>
                     <View style={styles.button}>

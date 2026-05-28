@@ -1,20 +1,24 @@
-export class Tarefa{
-    constructor(titulo, descricao, data){
-        this.titulo = titulo
-        this.descricao = descricao
-        this.data = data
-        this.status = false
+export class Tarefa {
+    constructor(titulo, descricao, data) {
+        this.id = Math.random().toString(36).substr(2, 9) + Date.now(); // ID único universal
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.data = data;
+        this.status = false;
     }
-    getTitulo(){
-        return this.titulo
+    getId() {
+        return this.id;
     }
-    getDescricao(){
-        return this.descricao
+    getTitulo() {
+        return this.titulo;
     }
-    getData(){
-        return this.data
+    getDescricao() {
+        return this.descricao;
     }
-    getStatus(){
-        return this.status
+    getData() {
+        return this.data;
+    }
+    getStatus() {
+        return this.status;
     }
 }

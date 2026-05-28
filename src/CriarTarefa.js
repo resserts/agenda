@@ -7,68 +7,86 @@ import {
      TouchableOpacity
 } from 'react-native'
 import DatePicker from 'react-datepicker'
-import TarefasDia from './TarefasDia'
 import { Tarefa } from './Tarefa'
-import { Perfil } from './Perfil'
 
 export default class CriarTarefa extends React.Component {
      state = {
-          titulo:'',
-          data:new Date(),
+          titulo: '',
+          data: new Date(),
           status: false,
           descricao: ''
      }
+
      onChangeText = (key, value) => {
           this.setState({ [key]: value })
      }
+
+     onChangeDate = (date) => {
+          this.setState({ data: date })
+     }
+
      submit = () => {
-          if(this.state.titulo === ''){
+          if (this.state.titulo === '') {
                alert('Por favor insira um titulo')
                return
           }
-          if(this.state.data === ''){
+          if (this.state.data === '') {
                alert('Por favor insira uma data')
                return
           }
+
           var perfil = this.props.getPerfil()
           perfil.addTarefa(new Tarefa(this.state.titulo, this.state.descricao, this.state.data))
+
           this.setState({
-               titulo:'',
-               data:new Date(),
+               titulo: '',
+               data: new Date(),
                status: false,
                descricao: ''
           })
-          this.props.navigation.navigate('Tarefas dia', {TarefasDia})
+
+          // Volta de forma limpa para a tela anterior
+          this.props.navigation.navigate('RefazendoNavegacao', { screen: 'Tarefas dia' })
+          this.props.navigation.navigate('Tarefas dia')
      }
-     render(){
+
+     render() {
           return (
-               <View style={styles.container}>
-               <TextInput
-               placeholder='Titulo'
-               onChangeText={val => this.onChangeText('titulo', val)}
-               style={styles.input}
-               value={this.state.titulo}
-               />
-               <DatePicker
-               selected={this.state.data}
-               onChange={(date) => {this.state.data=date}}
-               />
-               <TextInput
-               placeholder='Descrição'
-               onChangeText={val => this.onChangeText('descricao', val)}
-               style={styles.input}
-               value={this.state.nome}
-               />
-               <TouchableOpacity onPress={this.submit}>
-               <View style={styles.button}>
-                    <Text style={styles.buttonText}>Criar</Text>
-               </View>
-               </TouchableOpacity>
-               </View>
+              <View style={styles.container}>
+                   <TextInput
+                       placeholder='Titulo'
+                       onChangeText={val => this.onChangeText('titulo', val)}
+                       style={styles.input}
+                       value={this.state.titulo}
+                       placeholderTextColor="#64748b"
+                   />
+
+                   <View style={styles.datePickerContainer}>
+                        <DatePicker
+                            selected={this.state.data}
+                            onChange={this.onChangeDate}
+                            dateFormat="dd/MM/yyyy"
+                        />
+                   </View>
+
+                   <TextInput
+                       placeholder='Descrição'
+                       onChangeText={val => this.onChangeText('descricao', val)}
+                       style={styles.input}
+                       value={this.state.descricao}
+                       placeholderTextColor="#64748b"
+                   />
+
+                   <TouchableOpacity onPress={this.submit}>
+                        <View style={styles.button}>
+                             <Text style={styles.buttonText}>Criar</Text>
+                        </View>
+                   </TouchableOpacity>
+              </View>
           )
      }
 }
-// ... (imports permanecem iguais)
+
 const styles = StyleSheet.create({
      container: {
           backgroundColor: '#0f172a',
@@ -86,8 +104,18 @@ const styles = StyleSheet.create({
           borderWidth: 1,
           borderColor: '#334155',
           marginBottom: 15,
-          width: '100%',
-          justifyContent: 'center' // Para o DatePicker parecer um input
+          width: '100%'
+     },
+     datePickerContainer: {
+          height: 55,
+          backgroundColor: '#1e293b',
+          borderRadius: 12,
+          justifyContent: 'center',
+          paddingHorizontal: 15,
+          borderWidth: 1,
+          borderColor: '#334155',
+          marginBottom: 15,
+          width: '100%'
      },
      button: {
           height: 55,
@@ -103,38 +131,3 @@ const styles = StyleSheet.create({
           fontWeight: 'bold'
      }
 })
-/*const styles = StyleSheet.create({
-     button: {
-          height: 50,
-          backgroundColor: '#666',
-          justifyContent: 'center',
-          alignItems: 'center',
-          alignSelf: 'flex-end',
-          width: 150,
-          margin: 10
-     },
-     buttonText: {
-          color: 'white',
-          fontSize: 18
-     },
-     heading: {
-          color: '#1F422F',
-          fontSize: 40,
-          marginBottom: 10,
-          alignSelf: 'center'
-     },
-     container: {
-          backgroundColor: '#101C30',
-          flex: 1,
-          justifyContent: 'center'
-     },
-     input: {
-          margin: 10,
-          backgroundColor: 'white',
-          width: 300,
-          alignSelf: 'center',
-          height: 50
-     }
-})*/
-
-
