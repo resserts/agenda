@@ -16,8 +16,14 @@ import CriarPerfil from './CriarPerfil'
                this.props.navigation.navigate("Tarefas dia", TarefasDia)
           }
           alterarStatusButton = (tarefa) => {
+               // 1. Inverte o status da tarefa em memória
                tarefa.status = !tarefa.status;
+
+               // 2. Força o React Navigation a re-renderizar a tela atual
                this.props.navigation.setParams({ refresh: Math.random() });
+
+               // 3. Garante que a navegação continue estável nesta tela
+               this.props.navigation.navigate("Tarefas todas");
           }
           render(){
                const perfis = this.props.perfis
@@ -34,14 +40,16 @@ import CriarPerfil from './CriarPerfil'
                                    <View style={styles.perfilContainer} key={index}>
                                         {!item.getTarefas().length && <Text style={styles.tarefa}>Nenhuma tarefa salva</Text>}
                                         {
-                                             item.getTarefas().map((tarefa, idx) => (
+                                             item.getTarefas().map((tarefa) => (
+                                                 /* CORRIGIDO: key única usando o ID universal da tarefa */
                                                  <View style={styles.tarefaContainer} key={tarefa.getId()}>
                                                       <Text style={styles.tarefa}>{tarefa.titulo}</Text>
                                                       <Text style={styles.tarefa}>{tarefa.data.toDateString()}</Text>
                                                       <Text style={styles.tarefa}>{tarefa.descricao}</Text>
 
+                                                      {/* BOTÃO INTERATIVO DE STATUS */}
                                                       <TouchableOpacity
-                                                          style={{alignSelf: 'flex-end', width: '30%'}}
+                                                          style={{alignSelf: 'flex-end', width: '40%'}}
                                                           onPress={() => this.alterarStatusButton(tarefa)}
                                                       >
                                                            <View style={[styles.button, {marginVertical: 5, width: '100%'}, tarefa.status && {backgroundColor: '#22c55e'}]}>

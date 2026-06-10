@@ -23,8 +23,9 @@ import TarefasTodas from './TarefasTodas'
                this.props.navigation.navigate("Tarefas todas", TarefasTodas)
           }
           selecionarPerfilButton = (selecionar) => {
-               this.props.selecionarPerfil(selecionar)
-               this.props.navigation.navigate("Tarefas dia", TarefasDia)
+               this.props.selecionarPerfil(Number(selecionar));
+               this.props.navigation.setParams({ refresh: Math.random() });
+               this.props.navigation.navigate("Tarefas dia", TarefasDia);
           }
           selecionarDiaButton = (dia) => {
                this.props.selecionarDia(dia)
@@ -61,17 +62,39 @@ import TarefasTodas from './TarefasTodas'
                               <Text style={styles.buttonText}>Criar Perfil</Text>
                          </View>
                          </TouchableOpacity>
-                         <View style={styles.button}>
-                              <select onChange={p => this.selecionarPerfilButton(p.target.value)} value={selecionado} style={{color: 'white', fontSize: 16, fontWeight: 'bold'}}>
+                         {/* SEÇÃO DE SELEÇÃO DE PERFIL NATIVA */}
+                         <Text style={[styles.tarefa, {marginLeft: 20, marginTop: 10, fontWeight: 'bold', color: '#6366f1'}]}>Selecionar Perfil:</Text>
+                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginVertical: 10, paddingHorizontal: 15}}>
                               {
-                                   perfis.map((item, index) => (
-                                        <option value={index}>{item.nome}</option>
-                                   ))
+                                   perfis.map((item, index) => {
+                                        const estaSelecionado = index === selecionado;
+                                        return (
+                                            <TouchableOpacity
+                                                key={index}
+                                                onPress={() => this.selecionarPerfilButton(index)}
+                                                style={[
+                                                     { paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20, marginRight: 10, borderWidth: 1 },
+                                                     estaSelecionado
+                                                         ? { backgroundColor: '#6366f1', borderColor: '#6366f1' }
+                                                         : { backgroundColor: '#1e293b', borderColor: '#334155' }
+                                                ]}
+                                            >
+                                                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>
+                                                      {item.nome} {estaSelecionado && '👤'}
+                                                 </Text>
+                                            </TouchableOpacity>
+                                        );
+                                   })
                               }
-                              </select>
+                         </ScrollView>
+
+                         {/* SEÇÃO DO CALENDÁRIO */}
+                         <View style={[styles.button, {flexDirection: 'row', gap: 10}]}>
+                              <Text style={styles.buttonText}>📅 Data:</Text>
                               <DatePicker
-                                   selected={dia}
-                                   onChange={(date) => { this.selecionarDiaButton(date)}}
+                                  selected={dia}
+                                  onChange={(date) => { this.selecionarDiaButton(date)}}
+                                  dateFormat="dd/MM/yyyy"
                               />
                          </View>
                          <View style={[!tarefas.length && { justifyContent: 'center', flex: 1 , backgroundColor: '#101010'}]}>
