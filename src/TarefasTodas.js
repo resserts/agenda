@@ -14,13 +14,11 @@ export default class TarefasTodas extends React.Component {
      }
      alterarStatusButton = (tarefa) => {
           tarefa.status = !tarefa.status
-          this.props.navigation.setParams({ refresh: Math.random() })
-          this.props.navigation.navigate("Tarefas todas")
+          this.forceUpdate()
      }
      excluirTarefaButton = (perfil, tarefa) => {
           perfil.tarefas = perfil.getTarefas().filter(t => t.getId() !== tarefa.getId())
-          this.props.navigation.setParams({ refresh: Math.random() })
-          this.props.navigation.navigate("Tarefas todas")
+          this.forceUpdate()
      }
      excluirPerfilButton = (perfilExcluir) => {
           const perfis = this.props.perfis
@@ -31,8 +29,14 @@ export default class TarefasTodas extends React.Component {
                     this.props.selecionarPerfil(perfis.length - 1)
                }
           }
-          this.props.navigation.setParams({ refresh: Math.random() })
-          this.props.navigation.navigate("Tarefas todas")
+          this.forceUpdate()
+     }
+     editarPerfilButton = (perfil) => {
+          const novoNome = prompt("Digite o novo nome do perfil:", perfil.nome)
+          if(novoNome && novoNome.trim() !== "") {
+               perfil.nome = novoNome.trim()
+               this.forceUpdate()
+          }
      }
      render(){
           const perfis = this.props.perfis
@@ -46,13 +50,20 @@ export default class TarefasTodas extends React.Component {
                         {
                              perfis.map((item, index) => (
                                  <View style={styles.perfilOuterContainer} key={index}>
-                                      <View style={{flexDirection: 'row', justifyContent: 'between', alignItems: 'center', paddingHorizontal: 20, marginTop: 10, width: '100%'}}>
+                                      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, marginTop: 10, width: '100%'}}>
                                            <Text style={{color: '#6366f1', fontSize: 18, fontWeight: 'bold'}}>{item.nome}</Text>
-                                           <TouchableOpacity onPress={() => this.excluirPerfilButton(item)} style={{marginLeft: 'auto'}}>
-                                                <View style={{backgroundColor: '#ef4444', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8}}>
-                                                     <Text style={{color: 'white', fontSize: 12, fontWeight: 'bold'}}>Remover Perfil</Text>
-                                                </View>
-                                           </TouchableOpacity>
+                                           <View style={{flexDirection: 'row', marginLeft: 'auto', gap: 5}}>
+                                                <TouchableOpacity onPress={() => this.editarPerfilButton(item)}>
+                                                     <View style={{backgroundColor: '#eab308', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8}}>
+                                                          <Text style={{color: 'white', fontSize: 12, fontWeight: 'bold'}}>Editar</Text>
+                                                     </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => this.excluirPerfilButton(item)}>
+                                                     <View style={{backgroundColor: '#ef4444', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8}}>
+                                                          <Text style={{color: 'white', fontSize: 12, fontWeight: 'bold'}}>Remover</Text>
+                                                     </View>
+                                                </TouchableOpacity>
+                                           </View>
                                       </View>
 
                                       <View style={styles.perfilContainer}>

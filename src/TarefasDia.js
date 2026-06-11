@@ -23,29 +23,44 @@ export default class TarefasDia extends React.Component {
      }
      selecionarPerfilButton = (selecionar) => {
           this.props.selecionarPerfil(Number(selecionar))
-          this.props.navigation.setParams({ refresh: Math.random() })
-          this.props.navigation.navigate("Tarefas dia", TarefasDia)
+          this.forceUpdate()
      }
      selecionarDiaButton = (dia) => {
           this.props.selecionarDia(dia)
-          this.props.navigation.navigate("Tarefas dia", TarefasDia)
+          this.forceUpdate()
      }
      alterarStatusButton = (tarefa) => {
           tarefa.status = !tarefa.status
-          this.props.navigation.setParams({ refresh: Math.random() })
+          this.forceUpdate()
      }
      excluirTarefaButton = (tarefa) => {
           const perfis = this.props.perfis
           const selecionado = this.props.selecionado
           const perfil = perfis[selecionado]
           perfil.tarefas = perfil.getTarefas().filter(t => t.getId() !== tarefa.getId())
-          this.props.navigation.setParams({ refresh: Math.random() })
+          this.forceUpdate()
+     }
+     excluirPerfilButton = (perfilExcluir) => {
+          const perfis = this.props.perfis
+          const idx = perfis.indexOf(perfilExcluir)
+          if(idx > -1) {
+               perfis.splice(idx, 1)
+               this.props.selecionarPerfil(perfis.length - 1)
+          }
+          this.forceUpdate()
+     }
+     editarPerfilButton = (perfil) => {
+          const novoNome = prompt("Digite o novo nome do perfil:", perfil.nome)
+          if(novoNome && novoNome.trim() !== "") {
+               perfil.nome = novoNome.trim()
+               this.forceUpdate()
+          }
      }
      render(){
           const perfis = this.props.perfis
           const selecionado = this.props.selecionado
           const dia = this.props.dia
-          if(selecionado<0){
+          if(selecionado<0 || !perfis.length){
                return (
                    <View style={styles.container}>
                         <TouchableOpacity onPress={this.criarPerfilButton}>
@@ -60,9 +75,22 @@ export default class TarefasDia extends React.Component {
           const tarefas = perfis[selecionado].getTarefas().filter(tarefa => tarefa.data.toDateString() === dia.toDateString()).sort((a, b) => a.data.getTime() - b.data.getTime())
           return (
               <ScrollView style={{backgroundColor: '#101010'}} contentContainerStyle={[!tarefas.length && {flex: 1, backgroundColor: '#202020'}]}>
-                   <TouchableOpacity onPress={this.criarPerfilButton}>
+                   <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '90%', alignSelf: 'center', marginTop: 10}}>
+                        <TouchableOpacity onPress={() => this.editarPerfilButton(perfis[selecionado])} style={{flex: 1, marginRight: 5}}>
+                             <View style={[styles.statusButton, {backgroundColor: '#eab308', height: 40}]}>
+                                  <Text style={styles.buttonText}>✏️ Editar Perfil Atual</Text>
+                             </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.excluirPerfilButton(perfis[selecionado])} style={{flex: 1, marginLeft: 5}}>
+                             <View style={[styles.statusButton, {backgroundColor: '#ef4444', height: 40}]}>
+                                  <Text style={styles.buttonText}>❌ Remover Perfil Atual</Text>
+                             </View>
+                        </TouchableOpacity>
+                   </View>
+
+                   <TouchableOpacity onPress={this.criarPerfilButton} style={{marginTop: 5}}>
                         <View style={styles.button}>
-                             <Text style={styles.buttonText}>Criar Perfil</Text>
+                             <Text style={styles.buttonText}>Criar Novo Perfil</Text>
                         </View>
                    </TouchableOpacity>
 
@@ -168,7 +196,8 @@ const styles = StyleSheet.create({
           backgroundColor: '#6366f1',
           justifyContent: 'center',
           alignItems: 'center',
-          borderRadius: 12
+          borderRadius: 12,
+          flexDirection: 'row'
      },
      buttonText: {
           color: 'white',
