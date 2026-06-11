@@ -21,11 +21,11 @@ export default class TarefasTodas extends React.Component {
           this.forceUpdate()
      }
      excluirPerfilButton = (perfilExcluir) => {
-          const perfis = this.props.perfis
+          const perfis = this.props.perfis || []
           const idx = perfis.indexOf(perfilExcluir)
           if(idx > -1) {
                perfis.splice(idx, 1)
-               if(this.props.selecionado >= perfis.length) {
+               if(this.props.selecionarPerfil) {
                     this.props.selecionarPerfil(perfis.length - 1)
                }
           }
@@ -39,7 +39,7 @@ export default class TarefasTodas extends React.Component {
           }
      }
      render(){
-          const perfis = this.props.perfis
+          const perfis = this.props.perfis || []
 
           return (
               <ScrollView style={{backgroundColor: '#101010'}} contentContainerStyle={[!perfis.length && {flex: 1, backgroundColor: '#202020'}]}>

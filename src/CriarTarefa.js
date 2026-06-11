@@ -142,7 +142,9 @@ const styles = StyleSheet.create({
           borderWidth: 1,
           borderColor: '#334155',
           marginBottom: 15,
-          width: '100%'
+          width: '100%',
+          zIndex: 9999,
+          elevation: 9999
      },
      button: {
           height: 55,

@@ -36,9 +36,10 @@ export default class TarefasDia extends React.Component {
      excluirTarefaButton = (tarefa) => {
           const perfis = this.props.perfis
           const selecionado = this.props.selecionado
-          const perfil = perfis[selecionado]
-          perfil.tarefas = perfil.getTarefas().filter(t => t.getId() !== tarefa.getId())
-          this.forceUpdate()
+          if(perfis[selecionado]) {
+               perfis[selecionado].tarefas = perfis[selecionado].getTarefas().filter(t => t.getId() !== tarefa.getId())
+               this.forceUpdate()
+          }
      }
      excluirPerfilButton = (perfilExcluir) => {
           const perfis = this.props.perfis
@@ -60,7 +61,8 @@ export default class TarefasDia extends React.Component {
           const perfis = this.props.perfis
           const selecionado = this.props.selecionado
           const dia = this.props.dia
-          if(selecionado<0 || !perfis.length){
+
+          if(selecionado < 0 || !perfis || !perfis.length){
                return (
                    <View style={styles.container}>
                         <TouchableOpacity onPress={this.criarPerfilButton}>
@@ -72,10 +74,11 @@ export default class TarefasDia extends React.Component {
                )
           }
 
-          const tarefas = perfis[selecionado].getTarefas().filter(tarefa => tarefa.data.toDateString() === dia.toDateString()).sort((a, b) => a.data.getTime() - b.data.getTime())
+          const tarefas = perfis[selecionado] ? perfis[selecionado].getTarefas().filter(tarefa => tarefa.data.toDateString() === dia.toDateString()).sort((a, b) => a.data.getTime() - b.data.getTime()) : []
+
           return (
-              <ScrollView style={{backgroundColor: '#101010'}} contentContainerStyle={[!tarefas.length && {flex: 1, backgroundColor: '#202020'}]}>
-                   <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '90%', alignSelf: 'center', marginTop: 10}}>
+              <ScrollView style={{backgroundColor: '#101010', zIndex: 1}} contentContainerStyle={[!tarefas.length && {flex: 1, backgroundColor: '#202020'}]}>
+                   <View style={{flexDirection: 'row', justifyContent: 'space-around', width: '90%', alignSelf: 'center', marginTop: 10, zIndex: 2}}>
                         <TouchableOpacity onPress={() => this.editarPerfilButton(perfis[selecionado])} style={{flex: 1, marginRight: 5}}>
                              <View style={[styles.statusButton, {backgroundColor: '#eab308', height: 40}]}>
                                   <Text style={styles.buttonText}>✏️ Editar Perfil Atual</Text>
@@ -88,14 +91,14 @@ export default class TarefasDia extends React.Component {
                         </TouchableOpacity>
                    </View>
 
-                   <TouchableOpacity onPress={this.criarPerfilButton} style={{marginTop: 5}}>
+                   <TouchableOpacity onPress={this.criarPerfilButton} style={{marginTop: 5, zIndex: 2}}>
                         <View style={styles.button}>
                              <Text style={styles.buttonText}>Criar Novo Perfil</Text>
                         </View>
                    </TouchableOpacity>
 
-                   <Text style={[styles.tarefa, {marginLeft: 20, marginTop: 10, fontWeight: 'bold', color: '#6366f1'}]}>Selecionar Perfil:</Text>
-                   <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginVertical: 10, paddingHorizontal: 15}}>
+                   <Text style={[styles.tarefa, {marginLeft: 20, marginTop: 10, fontWeight: 'bold', color: '#6366f1', zIndex: 2}]}>Selecionar Perfil:</Text>
+                   <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginVertical: 10, paddingHorizontal: 15, zIndex: 3}}>
                         {
                              perfis.map((item, index) => {
                                   const estaSelecionado = index === AppNum(selecionado);
@@ -119,13 +122,16 @@ export default class TarefasDia extends React.Component {
                         }
                    </ScrollView>
 
-                   <View style={styles.button}>
+                   <View style={styles.datePickerWrapper}>
+                        <Text style={styles.dateLabel}>📅 Filtrar por Data:</Text>
                         <DatePicker
                             selected={dia}
                             onChange={(date) => { this.selecionarDiaButton(date)}}
+                            dateFormat="dd/MM/yyyy"
                         />
                    </View>
-                   <View style={[!tarefas.length && { justifyContent: 'center', flex: 1 , backgroundColor: '#101010'}]}>
+
+                   <View style={[!tarefas.length && { justifyContent: 'center', flex: 1 , backgroundColor: '#101010'}, {zIndex: 1}]}>
                         {
                             !tarefas.length && <Text style={styles.text}>Não há nenhuma tarefa salva</Text>
                         }
@@ -157,12 +163,12 @@ export default class TarefasDia extends React.Component {
                              ))
                         }
                    </View>
-                   <TouchableOpacity onPress={this.criarTarefaButton}>
+                   <TouchableOpacity onPress={this.criarTarefaButton} style={{zIndex: 1}}>
                         <View style={styles.button}>
                              <Text style={styles.buttonText}>Criar Tarefa</Text>
                         </View>
                    </TouchableOpacity>
-                   <TouchableOpacity onPress={this.tarefasTodasButton}>
+                   <TouchableOpacity onPress={this.tarefasTodasButton} style={{zIndex: 1}}>
                         <View style={styles.button}>
                              <Text style={styles.buttonText}>Ver todas as tarefas</Text>
                         </View>
@@ -189,6 +195,27 @@ const styles = StyleSheet.create({
           width: '90%',
           borderRadius: 12,
           marginVertical: 15
+     },
+     datePickerWrapper: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          alignSelf: 'center',
+          justifyContent: 'center',
+          width: '90%',
+          height: 50,
+          backgroundColor: '#1e293b',
+          borderRadius: 12,
+          marginVertical: 15,
+          borderWidth: 1,
+          borderColor: '#334155',
+          zIndex: 9999,
+          elevation: 9999
+     },
+     dateLabel: {
+          color: 'white',
+          fontSize: 16,
+          fontWeight: 'bold',
+          marginRight: 10
      },
      statusButton: {
           paddingVertical: 8,

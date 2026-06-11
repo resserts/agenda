@@ -7,11 +7,10 @@ import {
      TouchableOpacity
 } from 'react-native'
 import { Perfil } from './Perfil'
-import TarefasDia from './TarefasDia'
 
 export default class CriarPerfil extends React.Component {
      state = {
-          nome:''
+          nome: ''
      }
      onChangeText = (key, value) => {
           this.setState({ [key]: value })
@@ -22,31 +21,34 @@ export default class CriarPerfil extends React.Component {
                return
           }
 
-          var perfil = new Perfil(this.state.nome)
-          this.props.criarPerfil(perfil)
+          const novoPerfil = new Perfil(this.state.nome)
+          this.props.addPerfil(novoPerfil)
+
           this.setState({
-               nome:''
+               nome: ''
           })
-          this.props.navigation.navigate('Tarefas dia', {TarefasDia})
+          this.props.navigation.navigate('Tarefas dia')
      }
      render(){
           return (
-               <View style={styles.container}>
-               <TextInput
-               placeholder='Nome'
-               onChangeText={val => this.onChangeText('nome', val)}
-               style={styles.input}
-               value={this.state.nome}
-               />
-               <TouchableOpacity onPress={this.submit}>
-               <View style={styles.button}>
-                    <Text style={styles.buttonText}>Criar</Text>
-               </View>
-               </TouchableOpacity>
-               </View>
+              <View style={styles.container}>
+                   <TextInput
+                       placeholder='Nome'
+                       onChangeText={val => this.onChangeText('nome', val)}
+                       style={styles.input}
+                       value={this.state.nome}
+                       placeholderTextColor="#64748b"
+                   />
+                   <TouchableOpacity onPress={this.submit}>
+                        <View style={styles.button}>
+                             <Text style={styles.buttonText}>Criar</Text>
+                        </View>
+                   </TouchableOpacity>
+              </View>
           )
      }
 }
+
 const styles = StyleSheet.create({
      container: {
           backgroundColor: '#0f172a',
@@ -64,8 +66,7 @@ const styles = StyleSheet.create({
           borderWidth: 1,
           borderColor: '#334155',
           marginBottom: 15,
-          width: '100%',
-          alignSelf: 'center'
+          width: '100%'
      },
      button: {
           height: 55,
@@ -73,12 +74,7 @@ const styles = StyleSheet.create({
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: 12,
-          width: '100%',
-          marginTop: 10,
-          elevation: 3,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.25
+          marginTop: 10
      },
      buttonText: {
           color: 'white',
@@ -86,38 +82,3 @@ const styles = StyleSheet.create({
           fontWeight: 'bold'
      }
 })
-/*const styles = StyleSheet.create({
-     button: {
-          height: 50,
-          backgroundColor: '#666',
-          justifyContent: 'center',
-          alignItems: 'center',
-          alignSelf: 'flex-end',
-          width: 150,
-          margin: 10
-     },
-     buttonText: {
-          color: 'white',
-          fontSize: 18
-     },
-     heading: {
-          color: '#1F422F',
-          fontSize: 40,
-          marginBottom: 10,
-          alignSelf: 'center'
-     },
-     container: {
-          backgroundColor: '#101C30',
-          flex: 1,
-          justifyContent: 'center'
-     },
-     input: {
-          margin: 10,
-          backgroundColor: 'white',
-          width: 300,
-          alignSelf: 'center',
-          height: 50
-     }
-})*/
-
-
