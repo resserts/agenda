@@ -10,6 +10,24 @@ import DatePicker from 'react-datepicker'
 import CriarTarefa from './CriarTarefa'
 import CriarPerfil from './CriarPerfil'
 import TarefasTodas from './TarefasTodas'
+import { registerLocale } from 'react-datepicker'
+import ptBR from 'date-fns/locale/pt-BR'
+import 'react-datepicker/dist/react-datepicker.css'
+
+registerLocale('pt-BR', ptBR)
+
+const formatarDataBr = (dataObjeto) => {
+     if (!dataObjeto) return '';
+     const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+     const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+     const diaSemana = diasSemana[dataObjeto.getDay()];
+     const diaMes = dataObjeto.getDate();
+     const mes = meses[dataObjeto.getMonth()];
+     const ano = dataObjeto.getFullYear();
+
+     return `${diaSemana} - ${diaMes} de ${mes} de ${ano}`;
+}
 
 export default class TarefasDia extends React.Component {
      criarTarefaButton = () => {
@@ -128,6 +146,7 @@ export default class TarefasDia extends React.Component {
                             selected={dia}
                             onChange={(date) => { this.selecionarDiaButton(date)}}
                             dateFormat="dd/MM/yyyy"
+                            locale="pt-BR"
                         />
                    </View>
 
@@ -142,8 +161,8 @@ export default class TarefasDia extends React.Component {
                                           onPress={() => this.props.navigation.navigate("Criar tarefa", { tarefaParaEditar: item })}
                                           style={{ flex: 1 }}
                                       >
-                                           <Text style={[styles.tarefa, { fontWeight: 'bold', color: '#818cf8' }]}>{item.titulo} ✏️</Text>
-                                           <Text style={styles.tarefa}>{item.data.toDateString()}</Text>
+                                           <Text style={[styles.tarefa, { fontWeight: 'bold', color: '#818cf8' }]}>{item.titulo} </Text>
+                                           <Text style={styles.tarefa}>{formatarDataBr(item.data)}</Text>
                                            <Text style={[styles.tarefa, { color: '#94a3b8', fontSize: 14 }]}>{item.descricao}</Text>
                                       </TouchableOpacity>
 

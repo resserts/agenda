@@ -8,6 +8,11 @@ import {
 } from 'react-native'
 import DatePicker from 'react-datepicker'
 import { Tarefa } from './Tarefa'
+import { registerLocale } from 'react-datepicker'
+import ptBR from 'date-fns/locale/pt-BR'
+import 'react-datepicker/dist/react-datepicker.css'
+
+registerLocale('pt-BR', ptBR)
 
 export default class CriarTarefa extends React.Component {
      state = {
@@ -91,6 +96,7 @@ export default class CriarTarefa extends React.Component {
                             selected={this.state.data}
                             onChange={this.onChangeDate}
                             dateFormat="dd/MM/yyyy"
+                            locale="pt-BR"
                         />
                    </View>
 

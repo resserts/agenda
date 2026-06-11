@@ -8,6 +8,19 @@ import {
 } from 'react-native'
 import TarefasDia from './TarefasDia'
 
+const formatarDataBr = (dataObjeto) => {
+     if (!dataObjeto) return '';
+     const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+     const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+     const diaSemana = diasSemana[dataObjeto.getDay()];
+     const diaMes = dataObjeto.getDate();
+     const mes = meses[dataObjeto.getMonth()];
+     const ano = dataObjeto.getFullYear();
+
+     return `${diaSemana} - ${diaMes} de ${mes} de ${ano}`;
+}
+
 export default class TarefasTodas extends React.Component {
      tarefasDiaButton = () => {
           this.props.navigation.navigate("Tarefas dia", TarefasDia)
@@ -76,7 +89,7 @@ export default class TarefasTodas extends React.Component {
                                                              style={{ flex: 1 }}
                                                          >
                                                               <Text style={[styles.tarefa, { fontWeight: 'bold', color: '#818cf8' }]}>{tarefa.titulo} ✏️</Text>
-                                                              <Text style={styles.tarefa}>{tarefa.data.toDateString()}</Text>
+                                                              <Text style={styles.tarefa}>{formatarDataBr(tarefa.data)}</Text>
                                                               <Text style={[styles.tarefa, { color: '#94a3b8', fontSize: 14 }]}>{tarefa.descricao}</Text>
                                                          </TouchableOpacity>
 
