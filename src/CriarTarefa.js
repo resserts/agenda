@@ -14,7 +14,25 @@ export default class CriarTarefa extends React.Component {
           titulo: '',
           data: new Date(),
           status: false,
-          descricao: ''
+          descricao: '',
+          modoEdicao: false,
+          tarefaOriginal: null
+     }
+
+     // Executa assim que a tela abre: verifica se veio alguma tarefa para editar
+     componentDidMount() {
+          const params = this.props.route?.params;
+          if (params && params.tarefaParaEditar) {
+               const t = params.tarefaParaEditar;
+               this.setState({
+                    titulo: t.getTitulo(),
+                    data: t.getData(),
+                    status: t.getStatus(),
+                    descricao: t.getDescricao(),
+                    modoEdicao: true,
+                    tarefaOriginal: t // Guarda a referência física do objeto para atualizá-lo
+               });
+          }
      }
 
      onChangeText = (key, value) => {
@@ -35,18 +53,30 @@ export default class CriarTarefa extends React.Component {
                return
           }
 
-          var perfil = this.props.getPerfil()
-          perfil.addTarefa(new Tarefa(this.state.titulo, this.state.descricao, this.state.data))
+          if (this.state.modoEdicao) {
+               // MODO EDIÇÃO: Atualiza os dados diretamente no objeto que está na lista
+               const t = this.state.tarefaOriginal;
+               t.titulo = this.state.titulo;
+               t.descricao = this.state.descricao;
+               t.data = this.state.data;
+          } else {
+               // MODO CRIAÇÃO: Cria uma nova instância de Tarefa normalmente
+               var perfil = this.props.getPerfil()
+               perfil.addTarefa(new Tarefa(this.state.titulo, this.state.descricao, this.state.data))
+          }
 
+          // Limpa e reseta o estado interno do componente
           this.setState({
                titulo: '',
                data: new Date(),
                status: false,
-               descricao: ''
+               descricao: '',
+               modoEdicao: false,
+               tarefaOriginal: null
           })
 
-          // Volta de forma limpa para a tela anterior
-          this.props.navigation.navigate('RefazendoNavegacao', { screen: 'Tarefas dia' })
+          // Força a atualização do React Navigation para redesenhar as telas com os novos dados
+          this.props.navigation.setParams({ refresh: Math.random() });
           this.props.navigation.navigate('Tarefas dia')
      }
 
@@ -79,7 +109,9 @@ export default class CriarTarefa extends React.Component {
 
                    <TouchableOpacity onPress={this.submit}>
                         <View style={styles.button}>
-                             <Text style={styles.buttonText}>Criar</Text>
+                             <Text style={styles.buttonText}>
+                                  {this.state.modoEdicao ? 'Salvar Alterações' : 'Criar'}
+                             </Text>
                         </View>
                    </TouchableOpacity>
               </View>

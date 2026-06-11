@@ -103,12 +103,19 @@ import TarefasTodas from './TarefasTodas'
                          }
                               {
                                    tarefas.map((item) => (
-                                       /* CORRIGIDO: Agora usamos o ID único da tarefa como key */
                                        <View style={styles.tarefaContainer} key={item.getId()}>
-                                            <Text style={styles.tarefa}>{item.titulo}</Text>
-                                            <Text style={styles.tarefa}>{item.data.toDateString()}</Text>
-                                            <Text style={styles.tarefa}>{item.descricao}</Text>
 
+                                            {/* AGORA O CORPO DA TAREFA É CLICÁVEL E LEVA PARA A EDIÇÃO */}
+                                            <TouchableOpacity
+                                                onPress={() => this.props.navigation.navigate("Criar tarefa", { tarefaParaEditar: item })}
+                                                style={{ flex: 1 }}
+                                            >
+                                                 <Text style={[styles.tarefa, { fontWeight: 'bold', color: '#818cf8' }]}>{item.titulo} ✏️</Text>
+                                                 <Text style={styles.tarefa}>{item.data.toDateString()}</Text>
+                                                 <Text style={[styles.tarefa, { color: '#94a3b8', fontSize: 14 }]}>{item.descricao}</Text>
+                                            </TouchableOpacity>
+
+                                            {/* BOTÃO INTERATIVO DE STATUS */}
                                             <TouchableOpacity
                                                 style={{alignSelf: 'flex-end', width: '40%'}}
                                                 onPress={() => this.alterarStatusButton(item)}
