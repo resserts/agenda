@@ -47,10 +47,9 @@ export default class CriarPerfil extends React.Component {
           )
      }
 }
-// ... (imports permanecem iguais)
 const styles = StyleSheet.create({
      container: {
-          backgroundColor: '#0f172a', // Azul escuro moderno
+          backgroundColor: '#0f172a',
           flex: 1,
           justifyContent: 'center',
           padding: 20
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
      },
      button: {
           height: 55,
-          backgroundColor: '#6366f1', // Indigo vibrante
+          backgroundColor: '#6366f1',
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: 12,

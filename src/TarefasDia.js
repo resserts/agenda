@@ -11,140 +11,147 @@ import CriarTarefa from './CriarTarefa'
 import CriarPerfil from './CriarPerfil'
 import TarefasTodas from './TarefasTodas'
 
-
-     export default class TarefasDia extends React.Component {
-          criarTarefaButton = () => {
-               this.props.navigation.navigate("Criar tarefa", CriarTarefa)
-          }
-          criarPerfilButton = () => {
-               this.props.navigation.navigate("Criar perfil", CriarPerfil)
-          }
-          tarefasTodasButton = () => {
-               this.props.navigation.navigate("Tarefas todas", TarefasTodas)
-          }
-          selecionarPerfilButton = (selecionar) => {
-               this.props.selecionarPerfil(Number(selecionar));
-               this.props.navigation.setParams({ refresh: Math.random() });
-               this.props.navigation.navigate("Tarefas dia", TarefasDia);
-          }
-          selecionarDiaButton = (dia) => {
-               this.props.selecionarDia(dia)
-               this.props.navigation.navigate("Tarefas dia", TarefasDia)
-          }
-          alterarStatusButton = (tarefa) => {
-               tarefa.status = !tarefa.status;
-               // Força o React Navigation a atualizar o estado da tela baseada na mudança do objeto
-               this.props.navigation.setParams({ refresh: Math.random() });
-          }
-
-          render(){
-
-               const perfis = this.props.perfis
-               const selecionado = this.props.selecionado
-               const dia = this.props.dia
-               if(selecionado<0){
-                    return (
-                         <View>
-                              <TouchableOpacity onPress={this.criarPerfilButton}>
-                              <View style={styles.button}>
-                                   <Text style={styles.buttonText}>Criar Perfil</Text>
-                              </View>
-                              </TouchableOpacity>
-                         </View>
-                    )
-               }
-
-               const tarefas = perfis[selecionado].getTarefas().filter(tarefa => tarefa.data.toDateString() === dia.toDateString()).sort((a, b) => a.data.getTime() - b.data.getTime())
+export default class TarefasDia extends React.Component {
+     criarTarefaButton = () => {
+          this.props.navigation.navigate("Criar tarefa", CriarTarefa)
+     }
+     criarPerfilButton = () => {
+          this.props.navigation.navigate("Criar perfil", CriarPerfil)
+     }
+     tarefasTodasButton = () => {
+          this.props.navigation.navigate("Tarefas todas", TarefasTodas)
+     }
+     selecionarPerfilButton = (selecionar) => {
+          this.props.selecionarPerfil(Number(selecionar))
+          this.props.navigation.setParams({ refresh: Math.random() })
+          this.props.navigation.navigate("Tarefas dia", TarefasDia)
+     }
+     selecionarDiaButton = (dia) => {
+          this.props.selecionarDia(dia)
+          this.props.navigation.navigate("Tarefas dia", TarefasDia)
+     }
+     alterarStatusButton = (tarefa) => {
+          tarefa.status = !tarefa.status
+          this.props.navigation.setParams({ refresh: Math.random() })
+     }
+     excluirTarefaButton = (tarefa) => {
+          const perfis = this.props.perfis
+          const selecionado = this.props.selecionado
+          const perfil = perfis[selecionado]
+          perfil.tarefas = perfil.getTarefas().filter(t => t.getId() !== tarefa.getId())
+          this.props.navigation.setParams({ refresh: Math.random() })
+     }
+     render(){
+          const perfis = this.props.perfis
+          const selecionado = this.props.selecionado
+          const dia = this.props.dia
+          if(selecionado<0){
                return (
-                    <ScrollView style={{backgroundColor: '#101010'}} contentContainerStyle={[!tarefas.length && {flex: 1, backgroundColor: '#202020'}]}>
-                         <TouchableOpacity onPress={this.criarPerfilButton}>
-                         <View style={styles.button}>
-                              <Text style={styles.buttonText}>Criar Perfil</Text>
-                         </View>
-                         </TouchableOpacity>
-                         {/* SEÇÃO DE SELEÇÃO DE PERFIL NATIVA */}
-                         <Text style={[styles.tarefa, {marginLeft: 20, marginTop: 10, fontWeight: 'bold', color: '#6366f1'}]}>Selecionar Perfil:</Text>
-                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginVertical: 10, paddingHorizontal: 15}}>
-                              {
-                                   perfis.map((item, index) => {
-                                        const estaSelecionado = index === selecionado;
-                                        return (
-                                            <TouchableOpacity
-                                                key={index}
-                                                onPress={() => this.selecionarPerfilButton(index)}
-                                                style={[
-                                                     { paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20, marginRight: 10, borderWidth: 1 },
-                                                     estaSelecionado
-                                                         ? { backgroundColor: '#6366f1', borderColor: '#6366f1' }
-                                                         : { backgroundColor: '#1e293b', borderColor: '#334155' }
-                                                ]}
-                                            >
-                                                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>
-                                                      {item.nome} {estaSelecionado && '👤'}
-                                                 </Text>
-                                            </TouchableOpacity>
-                                        );
-                                   })
-                              }
-                         </ScrollView>
+                   <View style={styles.container}>
+                        <TouchableOpacity onPress={this.criarPerfilButton}>
+                             <View style={styles.button}>
+                                  <Text style={styles.buttonText}>Criar Perfil</Text>
+                             </View>
+                        </TouchableOpacity>
+                   </View>
+               )
+          }
 
-                         {/* SEÇÃO DO CALENDÁRIO */}
-                         <View style={[styles.button, {flexDirection: 'row', gap: 10}]}>
-                              <Text style={styles.buttonText}>📅 Data:</Text>
-                              <DatePicker
-                                  selected={dia}
-                                  onChange={(date) => { this.selecionarDiaButton(date)}}
-                                  dateFormat="dd/MM/yyyy"
-                              />
-                         </View>
-                         <View style={[!tarefas.length && { justifyContent: 'center', flex: 1 , backgroundColor: '#101010'}]}>
-                         {
-                              !tarefas.length && <Text style={styles.text}>Não há nenhuma tarefa salva</Text>
-                         }
-                              {
-                                   tarefas.map((item) => (
-                                       <View style={styles.tarefaContainer} key={item.getId()}>
+          const tarefas = perfis[selecionado].getTarefas().filter(tarefa => tarefa.data.toDateString() === dia.toDateString()).sort((a, b) => a.data.getTime() - b.data.getTime())
+          return (
+              <ScrollView style={{backgroundColor: '#101010'}} contentContainerStyle={[!tarefas.length && {flex: 1, backgroundColor: '#202020'}]}>
+                   <TouchableOpacity onPress={this.criarPerfilButton}>
+                        <View style={styles.button}>
+                             <Text style={styles.buttonText}>Criar Perfil</Text>
+                        </View>
+                   </TouchableOpacity>
 
-                                            {/* AGORA O CORPO DA TAREFA É CLICÁVEL E LEVA PARA A EDIÇÃO */}
-                                            <TouchableOpacity
-                                                onPress={() => this.props.navigation.navigate("Criar tarefa", { tarefaParaEditar: item })}
-                                                style={{ flex: 1 }}
-                                            >
-                                                 <Text style={[styles.tarefa, { fontWeight: 'bold', color: '#818cf8' }]}>{item.titulo} ✏️</Text>
-                                                 <Text style={styles.tarefa}>{item.data.toDateString()}</Text>
-                                                 <Text style={[styles.tarefa, { color: '#94a3b8', fontSize: 14 }]}>{item.descricao}</Text>
-                                            </TouchableOpacity>
+                   <Text style={[styles.tarefa, {marginLeft: 20, marginTop: 10, fontWeight: 'bold', color: '#6366f1'}]}>Selecionar Perfil:</Text>
+                   <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginVertical: 10, paddingHorizontal: 15}}>
+                        {
+                             perfis.map((item, index) => {
+                                  const estaSelecionado = index === AppNum(selecionado);
+                                  return (
+                                      <TouchableOpacity
+                                          key={index}
+                                          onPress={() => this.selecionarPerfilButton(index)}
+                                          style={[
+                                               { paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20, marginRight: 10, borderWidth: 1 },
+                                               estaSelecionado
+                                                   ? { backgroundColor: '#6366f1', borderColor: '#6366f1' }
+                                                   : { backgroundColor: '#1e293b', borderColor: '#334155' }
+                                          ]}
+                                      >
+                                           <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>
+                                                {item.nome} {estaSelecionado && '👤'}
+                                           </Text>
+                                      </TouchableOpacity>
+                                  );
+                             })
+                        }
+                   </ScrollView>
 
-                                            {/* BOTÃO INTERATIVO DE STATUS */}
-                                            <TouchableOpacity
-                                                style={{alignSelf: 'flex-end', width: '40%'}}
-                                                onPress={() => this.alterarStatusButton(item)}
-                                            >
-                                                 <View style={[styles.button, {marginVertical: 5, width: '100%'}, item.status && {backgroundColor: '#22c55e'}]}>
-                                                      <Text style={styles.buttonText}>{item.status ? '✅ Concluída' : '🟩 Pendente'}</Text>
-                                                 </View>
-                                            </TouchableOpacity>
-                                       </View>
-                                   ))
-                              }
-                    </View>
-                    <TouchableOpacity onPress={this.criarTarefaButton}>
-                    <View style={styles.button}>
-                         <Text style={styles.buttonText}>Criar Tarefa</Text>
-                    </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={this.tarefasTodasButton}>
-                    <View style={styles.button}>
-                         <Text style={styles.buttonText}>Ver todas as tarefas</Text>
-                    </View>
-                    </TouchableOpacity>
-               </ScrollView>
+                   <View style={styles.button}>
+                        <DatePicker
+                            selected={dia}
+                            onChange={(date) => { this.selecionarDiaButton(date)}}
+                        />
+                   </View>
+                   <View style={[!tarefas.length && { justifyContent: 'center', flex: 1 , backgroundColor: '#101010'}]}>
+                        {
+                            !tarefas.length && <Text style={styles.text}>Não há nenhuma tarefa salva</Text>
+                        }
+                        {
+                             tarefas.map((item) => (
+                                 <View style={styles.tarefaContainer} key={item.getId()}>
+                                      <TouchableOpacity
+                                          onPress={() => this.props.navigation.navigate("Criar tarefa", { tarefaParaEditar: item })}
+                                          style={{ flex: 1 }}
+                                      >
+                                           <Text style={[styles.tarefa, { fontWeight: 'bold', color: '#818cf8' }]}>{item.titulo} ✏️</Text>
+                                           <Text style={styles.tarefa}>{item.data.toDateString()}</Text>
+                                           <Text style={[styles.tarefa, { color: '#94a3b8', fontSize: 14 }]}>{item.descricao}</Text>
+                                      </TouchableOpacity>
+
+                                      <View style={{flexDirection: 'row', justifyContent: 'flex-end', gap: 10, marginTop: 10}}>
+                                           <TouchableOpacity onPress={() => this.excluirTarefaButton(item)}>
+                                                <View style={[styles.statusButton, {backgroundColor: '#ef4444'}]}>
+                                                     <Text style={styles.buttonText}>❌ Excluir</Text>
+                                                </View>
+                                           </TouchableOpacity>
+                                           <TouchableOpacity onPress={() => this.alterarStatusButton(item)}>
+                                                <View style={[styles.statusButton, item.status && {backgroundColor: '#22c55e'}]}>
+                                                     <Text style={styles.buttonText}>{item.status ? '✅ Concluída' : '🟩 Pendente'}</Text>
+                                                </View>
+                                           </TouchableOpacity>
+                                      </View>
+                                 </View>
+                             ))
+                        }
+                   </View>
+                   <TouchableOpacity onPress={this.criarTarefaButton}>
+                        <View style={styles.button}>
+                             <Text style={styles.buttonText}>Criar Tarefa</Text>
+                        </View>
+                   </TouchableOpacity>
+                   <TouchableOpacity onPress={this.tarefasTodasButton}>
+                        <View style={styles.button}>
+                             <Text style={styles.buttonText}>Ver todas as tarefas</Text>
+                        </View>
+                   </TouchableOpacity>
+              </ScrollView>
           )
      }
-
 }
-// ... (imports permanecem iguais)
+
+const AppNum = (val) => Number(val);
+
 const styles = StyleSheet.create({
+     container: {
+          backgroundColor: '#101010',
+          flex: 1,
+          justifyContent: 'center'
+     },
      button: {
           height: 50,
           backgroundColor: '#6366f1',
@@ -155,10 +162,19 @@ const styles = StyleSheet.create({
           borderRadius: 12,
           marginVertical: 15
      },
+     statusButton: {
+          paddingVertical: 8,
+          paddingHorizontal: 12,
+          backgroundColor: '#6366f1',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 12
+     },
      buttonText: {
           color: 'white',
-          fontSize: 16,
-          fontWeight: 'bold'
+          fontSize: 14,
+          fontWeight: 'bold',
+          textAlign: 'center'
      },
      tarefaContainer: {
           padding: 16,
@@ -168,7 +184,6 @@ const styles = StyleSheet.create({
           marginBottom: 12,
           borderWidth: 1,
           borderColor: '#334155',
-          // Sombra leve
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 1 },
           shadowOpacity: 0.2,
@@ -188,35 +203,3 @@ const styles = StyleSheet.create({
           marginTop: 50
      }
 })
-/*const styles = StyleSheet.create({
-     button: {
-          height: 50,
-          backgroundColor: '#666',
-          justifyContent: 'center',
-          alignItems: 'center',
-          alignSelf: 'center',
-          width: 150,
-          margin: 10
-     },
-     buttonText: {
-          color: 'white',
-          fontSize: 18
-     },
-     tarefaContainer: {
-          padding: 10,
-          backgroundColor: '#202020',
-          borderWidth: 2,
-          borderColor: 'white'
-     },
-     tarefa: {
-          fontSize: 20,
-          color: 'white'
-     },
-     text: {
-          alignSelf: 'center',
-          textAlign: 'center',
-          color: 'white',
-          fontSize: 24
-     }
-})*/
-
